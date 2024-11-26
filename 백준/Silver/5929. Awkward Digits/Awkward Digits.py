@@ -1,43 +1,48 @@
-def generate_candidates(base_string, base):
-    """
-    Generate all possible numbers by flipping one digit of a given base representation.
-    """
-    candidates = set()
-    for i, char in enumerate(base_string):
-        original_digit = int(char)
-        for replacement in range(base):
-            if replacement != original_digit:
-                # Replace the digit at position i
-                new_representation = (
-                    base_string[:i] + str(replacement) + base_string[i + 1:]
-                )
-                # Convert to decimal and store
-                candidates.add(int(new_representation, base))
-    return candidates
+a = list(input()) 
+b = list(input()) 
 
+tmp = []
 
-def find_correct_number(base2_str, base3_str):
-    """
-    Determine the correct decimal number based on the wrong base-2 and base-3 strings.
-    """
-    # Generate possible values for base-2 and base-3
-    base2_candidates = generate_candidates(base2_str, 2)
-    base3_candidates = generate_candidates(base3_str, 3)
+for i in range(len(a)):
+  A = []
+  for j in range(len(a)):
+    A.append(int(a[j])) 
+  if A[i] == 1:
+    A[i] = 0
+  elif A[i] == 0:
+    A[i] = 1
+  x = 0
+  for j in range(1, len(a)+1):
+    x+=A[-j]*(2**(j-1))
+  tmp.append(x)
 
-    # Find intersection
-    correct_number = base2_candidates.intersection(base3_candidates)
+for i in range(len(b)):
+  B = []
+  for j in range(len(b)):
+    B.append(int(b[j]))
+  
+  for j in range(2): 
+    if B[i] == 1:
+      t = 1 
+      if j == 0:
+        B[i] = 0
+      else: B[i] = 2
+    elif B[i] == 2:
+      t = 2 
+      if j == 0:
+        B[i] = 0
+      else: B[i] = 1
+    elif B[i] == 0:
+      t = 0
+      if j == 0:
+        B[i] = 1
+      else: B[i] = 2
+    y = 0
     
-    # There should be exactly one correct number
-    assert len(correct_number) == 1, "There must be a unique solution."
-    return correct_number.pop()
+    for j in range(1, len(b)+1):
+      y+=B[-j]*(3**(j-1))
 
-
-# Input and Output
-if __name__ == "__main__":
-    # Read input
-    base2_str = input().strip()
-    base3_str = input().strip()
-
-    # Solve the problem
-    result = find_correct_number(base2_str, base3_str)
-    print(result)
+    B[i] = t 
+    if y in tmp:
+      print(y)
+      exit()
